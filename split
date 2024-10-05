@@ -6,43 +6,38 @@ void swap(int& a, int& b) {
     b = temp;
 }
 
-void split(int* start, int* middle, int* end) {
-    int* i = start;
-    int* j = middle;
+void split(int* p, int* q) {
+    int* izquierda = p;
+    int* derecha = q - 1;
 
-    while (i < middle && j < end) {
-        while (i < middle && *i % 2 == 0) i++;
-        while (j < end && *j % 2 == 1) j++;
-
-        if (i < middle && j < end) {
-            swap(*i, *j);
+    while (izquierda < derecha) {
+        while (izquierda < derecha && *izquierda % 2 == 0) {
+            izquierda++;
+        }
+        while (izquierda < derecha && *derecha % 2 == 1) {
+            derecha--;
+        }
+        if (izquierda < derecha) {
+            swap(*izquierda, *derecha);
         }
     }
 }
+
 int main() {
-    int arr[10] = { 9, 1, 8, 2, 7, 3, 6, 4, 5, 0 };
-    int* start = arr;
-    int* middle = arr + 5;
-    int* end = arr + 10;
+    int arr[10] = { 9, 1, 8, 2, 7, 3, 6, 4, 5, 5 };
+    int* inicio = arr;
+    int* fin = arr + 10;
 
     std::cout << "Array original: ";
-    for (int* p = start; p < end; ++p) {
+    for (int* p = inicio; p < fin; ++p) {
         std::cout << *p << " ";
     }
     std::cout << std::endl;
 
-    split(start, middle, end);
+    split(inicio, fin);
 
-    std::cout << "Array después de split: ";
-    for (int* p = start; p < end; ++p) {
-        std::cout << *p << " ";
-    }
-    std::cout << std::endl;
-
-    merge(start, middle, end);
-
-    std::cout << "Array ordenado: ";
-    for (int* p = start; p < end; ++p) {
+    std::cout << "Array despues de split: ";
+    for (int* p = inicio; p < fin; ++p) {
         std::cout << *p << " ";
     }
     std::cout << std::endl;
