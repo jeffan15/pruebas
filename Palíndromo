@@ -1,0 +1,47 @@
+#include <iostream>
+
+bool esPalindromo(char* str) {
+    if (str == nullptr) 
+        return false;
+
+    char* p = str;
+    while (*p != '\0') {
+        p++;
+    }
+    p--;
+
+    while (str < p) {
+        if (*str != *p) {
+            return false;
+        }
+        str++;
+        p--;
+    }
+
+    return true;
+}
+
+void testPalindromo(const char* test) {
+    char str[100];
+    int i = 0;
+    while (test[i] != '\0' && i < 99) {
+        str[i] = test[i];
+        i++;
+    }
+    str[i] = '\0';
+
+    std::cout << "\"" << str << "\" es ";
+    if (!esPalindromo(str)) {
+        std::cout << "NO ";
+    }
+    std::cout << "palindromo" << std::endl;
+}
+
+int main() {
+    testPalindromo("anitalavalatina");
+    testPalindromo("reconocer");
+    testPalindromo("hola");
+    testPalindromo("oso");
+
+    return 0;
+}
