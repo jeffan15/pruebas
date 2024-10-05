@@ -1,0 +1,143 @@
+#include <iostream>
+
+class Convertidor {
+private:
+    static const char* unidades[10];
+    static const char* decenas[10];
+    static const char* centenas[10];
+    static const char* especiales[10];
+
+    static void concatenar(char* destino, const char* fuente) {
+        while (*destino) destino++;
+        while (*fuente) {
+            *destino = *fuente;
+            destino++;
+            fuente++;
+        }
+        *destino = '\0';
+    }
+
+public:
+    static void convertirGrupo(int numero, char* resultado) {
+        int centena = numero / 100;
+        int decena = (numero % 100) / 10;
+        int unidad = numero % 10;
+
+        if (centena > 0) {
+            if (centena == 1 && decena == 0 && unidad == 0) {
+                concatenar(resultado, "cien");
+                return;
+            }
+            concatenar(resultado, centenas[centena]);
+        }
+
+        if (decena > 0) {
+            if (decena == 1) {
+                if (unidad == 0) {
+                    concatenar(resultado, "diez");
+                    return;
+                }
+                if (unidad == 1) {
+                    concatenar(resultado, "once");
+                    return;
+                }
+                if (unidad == 2) {
+                    concatenar(resultado, "doce");
+                    return;
+                }
+                if (unidad == 3) {
+                    concatenar(resultado, "trece");
+                    return;
+                }
+                if (unidad == 4) {
+                    concatenar(resultado, "catorce");
+                    return;
+                }
+                if (unidad == 5) {
+                    concatenar(resultado, "quince");
+                    return;
+                }
+                concatenar(resultado, "dieci");
+                concatenar(resultado, unidades[unidad]);
+                return;
+            }
+            if (decena == 2) {
+                if (unidad == 0) {
+                    concatenar(resultado, "veinte");
+                    return;
+                }
+                concatenar(resultado, "veinti");
+            }
+            else {
+                concatenar(resultado, decenas[decena]);
+                if (unidad > 0) {
+                    concatenar(resultado, " y ");
+                }
+            }
+        }
+
+        if (unidad > 0 || numero == 0) {
+            concatenar(resultado, unidades[unidad]);
+        }
+    }
+
+    static void convertirNumeroALetras(int numero, char* resultado) {
+        resultado[0] = '\0';
+
+        if (numero == 0) {
+            concatenar(resultado, "cero");
+            return;
+        }
+
+        if (numero < 0) {
+            concatenar(resultado, "menos ");
+            numero = -numero;
+        }
+
+        int miles = numero / 1000;
+        int resto = numero % 1000;
+
+        if (miles > 0) {
+            if (miles == 1) {
+                concatenar(resultado, "mil ");
+            }
+            else {
+                convertirGrupo(miles, resultado);
+                concatenar(resultado, " mil ");
+            }
+        }
+
+        if (resto > 0) {
+            convertirGrupo(resto, resultado);
+        }
+    }
+};
+
+const char* Convertidor::unidades[] = { "", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve" };
+const char* Convertidor::decenas[] = { "", "", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa" };
+const char* Convertidor::centenas[] = { "", "ciento ", "doscientos ", "trescientos ", "cuatrocientos ", "quinientos ", "seiscientos ", "setecientos ", "ochocientos ", "novecientos " };
+const char* Convertidor::especiales[] = { "diez", "once", "doce", "trece", "catorce", "quince" };
+
+void probarConversion(int numero) {
+    char resultado[200];
+    Convertidor::convertirNumeroALetras(numero, resultado);
+    std::cout << numero << ": " << resultado << std::endl;
+}
+
+int main() {
+    char continuar = 's';
+    int numero;
+
+    while (continuar == 's' || continuar == 'S') {
+        std::cout << "Introduce un numero: ";
+        std::cin >> numero;
+        probarConversion(numero);
+
+        std::cout << "¿Deseas convertir otro numero? (s/n): ";
+        std::cin >> continuar;
+    }
+
+    std::cout << "Fin del programa." << std::endl;
+
+    return 0;
+}
