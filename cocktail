@@ -1,0 +1,60 @@
+#include <iostream>
+
+void swap(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+void cocktailSort(int* inicio, int* fin) {
+    bool sigue = true;
+    int* start = inicio;
+    int* end = fin - 1;
+
+    while (sigue) {
+        sigue = false;
+
+        for (int* p = start; p < end; p++) {
+            if (*p > *(p + 1)) {
+                swap(*p, *(p + 1));
+                sigue = true;
+            }
+        }
+
+        if (!sigue)
+            break;
+
+        sigue = false;
+        end--;
+
+        for (int* p = end - 1; p >= start; p--) {
+            if (*p > *(p + 1)) {
+                swap(*p, *(p + 1));
+                sigue = true;
+            }
+        }
+
+        start++;
+    }
+}
+
+void printArray(int arr[], int size, const std::string& message) {
+    std::cout << message;
+    for (int i = 0; i < size; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    int arr[] = { 9, 1, 8, 2, 7, 3, 6, 4, 5, 0 };
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    printArray(arr, size, "Array original: ");
+
+    cocktailSort(arr, arr + size);
+
+    printArray(arr, size, "Array ordenado: ");
+
+    return 0;
+}
