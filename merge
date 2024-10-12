@@ -1,38 +1,54 @@
 #include <iostream>
-
-void swap(int& a, int& b) {
-    int temp = a;
-    a = b;
-    b = temp;
+using namespace std;
+void imprimirArray(int* arr, int size) {
+    for (int i = 0; i < size; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
 }
 
-void merge(int* p, int* q) {
-    int* end = q + 5;
+void intercambiar(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
-    for (int* i = p; i < end - 1; i++) {
-        for (int* j = p; j < end - 1 - (i - p); j++) {
-            if (*j > *(j + 1)) {
-                swap(*j, *(j + 1));
+void merge(int* arr, int size) {
+    int* inicio = arr;
+    int* mitad = arr + size / 2;
+    int* fin = arr + size - 1;
+    bool ordenCompleto = false;
+
+    while (!ordenCompleto) {
+        ordenCompleto = true;
+        for (int* i = inicio; i < fin; i++) {
+            if (*i > *(i + 1)) {
+                intercambiar(i, i + 1);
+                ordenCompleto = false;
             }
+        }
+
+        if (fin == mitad) {
+            fin = arr + size - 1;
+            inicio = arr;
+        }
+        else {
+            fin--;
         }
     }
 }
+
 int main() {
-    int arr[10] = { 9, 1, 8, 2, 7, 3, 6, 4, 5, 0 };
+    int arr[] = { 9, 1, 8, 2, 7, 3, 6, 4, 5, 0 };
+    int size = sizeof(arr) / sizeof(arr[0]);
 
-    std::cout << "Array original: ";
-    for (int i = 0; i < 10; ++i) {
-        std::cout << arr[i] << " ";
-    }
-    std::cout << std::endl;
-    std::cout << std::endl;
-    merge(arr, arr + 5);
+    cout << "Array original: ";
+    imprimirArray(arr, size);
 
-    std::cout << "Array ordenado : ";
-    for (int i = 0; i < 10; ++i) {
-        std::cout << arr[i] << " ";
-    }
-    std::cout << std::endl;
+    merge(arr, size);
+
+    cout << "Array ordenado: ";
+    imprimirArray(arr, size);
 
     return 0;
 }
