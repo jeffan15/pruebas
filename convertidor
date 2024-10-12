@@ -5,7 +5,7 @@ private:
     static const char* unidades[10];
     static const char* decenas[10];
     static const char* centenas[10];
-    static const char* especiales[10];
+    static const char* especiales[6];
 
     static void concatenar(char* destino, const char* fuente) {
         while (*destino) destino++;
@@ -18,7 +18,7 @@ private:
     }
 
 public:
-    static void convertirGrupo(int numero, char* resultado) {
+    static void convertirGrupo(int numero, char* resultado, bool esFinal) {
         int centena = numero / 100;
         int decena = (numero % 100) / 10;
         int unidad = numero % 10;
@@ -33,28 +33,8 @@ public:
 
         if (decena > 0) {
             if (decena == 1) {
-                if (unidad == 0) {
-                    concatenar(resultado, "diez");
-                    return;
-                }
-                if (unidad == 1) {
-                    concatenar(resultado, "once");
-                    return;
-                }
-                if (unidad == 2) {
-                    concatenar(resultado, "doce");
-                    return;
-                }
-                if (unidad == 3) {
-                    concatenar(resultado, "trece");
-                    return;
-                }
-                if (unidad == 4) {
-                    concatenar(resultado, "catorce");
-                    return;
-                }
-                if (unidad == 5) {
-                    concatenar(resultado, "quince");
+                if (unidad <= 5) {
+                    concatenar(resultado, especiales[unidad]);
                     return;
                 }
                 concatenar(resultado, "dieci");
@@ -77,7 +57,12 @@ public:
         }
 
         if (unidad > 0 || numero == 0) {
-            concatenar(resultado, unidades[unidad]);
+            if (unidad == 1 && !esFinal) {
+                concatenar(resultado, "un");
+            }
+            else {
+                concatenar(resultado, unidades[unidad]);
+            }
         }
     }
 
@@ -98,17 +83,12 @@ public:
         int resto = numero % 1000;
 
         if (miles > 0) {
-            if (miles == 1) {
-                concatenar(resultado, "mil ");
-            }
-            else {
-                convertirGrupo(miles, resultado);
-                concatenar(resultado, " mil ");
-            }
+            convertirGrupo(miles, resultado, false);
+            concatenar(resultado, " mil ");
         }
 
-        if (resto > 0) {
-            convertirGrupo(resto, resultado);
+        if (resto > 0 || miles == 0) {
+            convertirGrupo(resto, resultado, true);
         }
     }
 };
